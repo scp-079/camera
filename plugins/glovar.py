@@ -25,8 +25,10 @@ report_channel_id: int = 0
 
 # [custom]
 creator_id: int = 0
+height: int = 0
 video_extension: str = ""
 video_path: str = ""
+width: int = 0
 
 try:
     config = RawConfigParser()
@@ -37,8 +39,10 @@ try:
     report_channel_id = int(config["channels"].get("report_channel_id", report_channel_id))
     # [custom]
     creator_id = int(config["custom"].get("creator_id", creator_id))
+    height = int(config["custom"].get("height", height))
     video_extension = config["custom"].get("video_extension", video_extension)
     video_path = config["custom"].get("video_path", video_path)
+    width = int(config["custom"].get("width", width))
 except Exception as e:
     logger.warning(f"Read data from config.ini error: {e}", exc_info=True)
 

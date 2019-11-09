@@ -27,8 +27,8 @@ def interval_min_01(client: Client) -> bool:
                 client=client,
                 cid=glovar.report_channel_id,
                 video=file,
-                width=640,
-                height=480
+                width=glovar.width,
+                height=glovar.height
             )
 
             if not result:
