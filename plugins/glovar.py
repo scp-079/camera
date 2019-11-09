@@ -57,6 +57,7 @@ admin_ids: Set[int] = {creator_id}
 all_commands: List[str] = ["ping"]
 
 locks: Dict[str, Lock] = {
+    "speak": Lock(),
     "upload": Lock()
 }
 
