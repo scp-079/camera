@@ -20,13 +20,19 @@ def interval_min_01(client: Client) -> bool:
 
         # Upload and delete
         for file in file_list:
+            if not run(f"sudo -u motion lsof -c motion | grep {file}", shell=True).returncode:
+                continue
+
             result = send_video(
                 client=client,
                 cid=glovar.report_channel_id,
                 video=file
             )
-            if result:
-                run(["sudo", "rm", "-f", file])
+
+            if not result:
+                continue
+
+            run(f"sudo -u motion rm -f {file}", shell=True)
 
         return True
     except Exception as e:
