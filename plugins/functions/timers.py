@@ -27,6 +27,7 @@ def interval_min_01(client: Client) -> bool:
                 client=client,
                 cid=glovar.report_channel_id,
                 video=file,
+                caption=file,
                 width=glovar.width,
                 height=glovar.height
             )
