@@ -65,7 +65,7 @@ locks: Dict[str, Lock] = {
     "upload": Lock()
 }
 
-version: str = "0.0.2"
+version: str = "0.0.3"
 
 # Init dir
 try:
