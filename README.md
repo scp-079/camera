@@ -15,12 +15,9 @@ This bot is used to send camera videos.
 
 - plugins
     - functions
-        - `channel.py` : Send messages to channel
         - `etc.py` : Miscellaneous
         - `file.py` : Save files
         - `filters.py` : Some filters
-        - `group.py` : Functions about group
-        - `ids.py` : Modify id lists
         - `telegram.py` : Some telegram functions
         - `timers.py` : Timer functions
     - handlers
