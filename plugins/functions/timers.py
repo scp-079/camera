@@ -23,11 +23,13 @@ def interval_min_01(client: Client) -> bool:
             if not run(f"sudo -u motion lsof -c motion | grep {file}", shell=True).returncode:
                 continue
 
+            filename = file.split("/")[-1].split("-")[-1].split(".")[0]
+
             result = send_video(
                 client=client,
                 cid=glovar.report_channel_id,
                 video=file,
-                caption=file,
+                caption=filename,
                 width=glovar.width,
                 height=glovar.height
             )
