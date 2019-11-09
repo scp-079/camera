@@ -118,7 +118,8 @@ def send_video(client: Client, cid: int, video: str, file_ref: str = None, capti
                     width=width,
                     height=height,
                     reply_to_message_id=mid,
-                    reply_markup=markup
+                    reply_markup=markup,
+                    supports_streaming=True
                 )
             except FloodWait as e:
                 flood_wait = True
