@@ -1,5 +1,8 @@
 import logging
 from configparser import RawConfigParser
+from os import mkdir
+from os.path import exists
+from shutil import rmtree
 from threading import Lock
 from typing import Dict, List, Set
 
@@ -57,7 +60,17 @@ locks: Dict[str, Lock] = {
     "upload": Lock()
 }
 
-version: str = "0.0.1"
+version: str = "0.0.2"
+
+# Init dir
+try:
+    rmtree("tmp")
+except Exception as e:
+    logger.info(f"Remove tmp error: {e}")
+
+for path in ["tmp"]:
+    if not exists(path):
+        mkdir(path)
 
 # Start program
 copyright_text = f"Camera v{version}, Copyright (C) 2019 Xiao\n"

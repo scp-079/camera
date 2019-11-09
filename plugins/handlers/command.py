@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 def ping(client: Client, message: Message) -> bool:
     try:
         cid = message.chat.id
-        text = f"{code('Pong!')}"
+        text = f"{code('Pong!')}\n"
         thread(send_message, (client, cid, text))
 
         return True
