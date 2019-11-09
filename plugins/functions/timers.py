@@ -5,7 +5,7 @@ from subprocess import run
 from pyrogram import Client
 
 from .. import glovar
-from .telegram import send_document
+from .telegram import send_video
 
 # Enable logging
 logger = logging.getLogger(__name__)
@@ -23,10 +23,12 @@ def interval_min_01(client: Client) -> bool:
             if not run(f"sudo -u motion lsof -c motion | grep {file}", shell=True).returncode:
                 continue
 
-            result = send_document(
+            result = send_video(
                 client=client,
                 cid=glovar.report_channel_id,
-                document=file
+                video=file,
+                width=640,
+                height=480
             )
 
             if not result:
