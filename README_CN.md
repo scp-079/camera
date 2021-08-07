@@ -43,6 +43,7 @@ daemon on
 width 640
 height 480
 framerate 100
+ffmpeg_video_codec mp4
 target_dir /home/pi/motion/tmp
 stream_maxrate 200
 ```

@@ -42,12 +42,9 @@ def interval_min_01(client: Client) -> bool:
         file_list = glob(f"{glovar.video_path}/*.{glovar.video_extension}")
         file_list.sort()
 
-        print(file_list)
-
         # Upload and delete
         for file in file_list:
             if not run(f"sudo -u motion lsof -c motion | grep {file}", shell=True).returncode:
-                print("skip")
                 continue
 
             filename = file.split("/")[-1].split("-")[-1].split(".")[0]
@@ -64,8 +61,6 @@ def interval_min_01(client: Client) -> bool:
             text = text.replace("%m", month)
             text = text.replace("%d", day)
             text += f"{lang('time')}{lang('colon')}{code(f'{hour}:{minute}:{second}')}\n"
-
-            print("try to send")
 
             result = send_video(
                 client=client,
