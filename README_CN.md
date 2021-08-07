@@ -116,4 +116,3 @@ WantedBy=default.target
 ```bash 
 systemctl --user enable --now camera
 ```
-

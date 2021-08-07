@@ -39,7 +39,7 @@ def restart_program(client: Client, cid: int = 0) -> bool:
 
     try:
         if cid:
-            send_message(client, cid, f"{lang('status')}：{code(lang('restarted'))}\n")
+            send_message(client, cid, f"{lang('status')}{lang('colon')}{code(lang('restarted'))}\n")
             return True
 
         service_name = getcwd().split("/")[-1]
