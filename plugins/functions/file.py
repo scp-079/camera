@@ -20,7 +20,7 @@ import logging
 import pickle
 from os import remove
 from os.path import exists
-from shutil import copyfile
+from shutil import copyfile, move
 from time import sleep
 
 from pyrogram import Client
@@ -78,6 +78,21 @@ def get_new_path(extension: str = "", prefix: str = "") -> str:
         result = f"{glovar.TMP_PATH}/{prefix}{file_path}{extension}"
     except Exception as e:
         logger.warning(f"Get new path error: {e}", exc_info=True)
+
+    return result
+
+
+def move_file(src: str, dst: str) -> bool:
+    # Move a file
+    result = False
+
+    try:
+        if not src or not exists(src) or not dst:
+            return False
+
+        result = bool(move(src, dst))
+    except Exception as e:
+        logger.warning(f"Move file error: {e}", exc_info=True)
 
     return result
 

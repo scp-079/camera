@@ -17,12 +17,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
+from datetime import datetime
 from html import escape
 from random import choice, uniform
 from string import ascii_letters, digits
 from threading import active_count, Thread, Timer
-from time import sleep
-from typing import Any, Callable
+from time import localtime, sleep, strftime
+from typing import Any, Callable, Optional
 
 from pyrogram.errors import FloodWait
 from pyrogram.types import Message
@@ -60,6 +61,33 @@ def delay(secs: int, target: Callable, args: list = None) -> bool:
         result = t.start() or True
     except Exception as e:
         logger.warning(f"Delay error: {e}", exc_info=True)
+
+    return result
+
+
+def get_int(text: str) -> Optional[int]:
+    # Get a int from a string
+    result = None
+
+    try:
+        result = int(text)
+    except Exception as e:
+        logger.info(f"Get int error: {e}", exc_info=True)
+
+    return result
+
+
+def get_readable_time(secs: int = 0, the_format: str = "%Y%m%d%H%M%S") -> str:
+    # Get a readable time string
+    result = ""
+
+    try:
+        if secs:
+            result = datetime.utcfromtimestamp(secs).strftime(the_format)
+        else:
+            result = strftime(the_format, localtime())
+    except Exception as e:
+        logger.warning(f"Get readable time error: {e}", exc_info=True)
 
     return result
 

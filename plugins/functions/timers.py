@@ -23,7 +23,8 @@ from subprocess import run
 from pyrogram import Client
 
 from .. import glovar
-from .etc import code, lang
+from .etc import code, lang, get_readable_time
+from .file import move_file
 from .telegram import send_video
 
 # Enable logging
@@ -80,5 +81,33 @@ def interval_min_01(client: Client) -> bool:
         logger.warning(f"Interval min 01 error: {e}", exc_info=True)
     finally:
         glovar.locks["upload"].release()
+
+    return result
+
+
+def log_rotation() -> bool:
+    # Log rotation
+    result = False
+
+    try:
+        move_file(f"{glovar.LOG_PATH}/log", f"{glovar.LOG_PATH}/log-{get_readable_time(the_format='%Y%m%d')}")
+
+        with open(f"{glovar.LOG_PATH}/log", "w", encoding="utf-8") as f:
+            f.write("")
+
+        # Reconfigure the logger
+        [logging.root.removeHandler(handler) for handler in logging.root.handlers[:]]
+        logging.basicConfig(
+            format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+            level=logging.WARNING,
+            filename=f"{glovar.LOG_PATH}/log",
+            filemode="a"
+        )
+
+        run(f"find {glovar.LOG_PATH}/log-* -mtime +30 -delete", shell=True)
+
+        result = True
+    except Exception as e:
+        logger.warning(f"Log rotation error: {e}", exc_info=True)
 
     return result
