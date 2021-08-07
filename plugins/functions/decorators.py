@@ -17,30 +17,40 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
+from functools import wraps
 
+from pyrogram.errors import FloodWait
 
-from pyrogram import Client, filters
-from pyrogram.types import Message
-
-from ..functions.etc import code, thread
-from ..functions.filters import admin_user
-from ..functions.telegram import send_message
+from .etc import thread, wait_flood
 
 # Enable logging
 logger = logging.getLogger(__name__)
 
 
-@Client.on_message(filters.incoming & filters.private & filters.command(["ping"])
-                   & admin_user)
-def ping(client: Client, message: Message) -> bool:
-    result = False
+def retry(func):
+    # FloodWait retry
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        result = None
+        while True:
+            try:
+                result = func(*args, **kwargs)
+            except FloodWait as e:
+                wait_flood(e)
+            except Exception as e:
+                logger.warning(f"Retry error: {e}", exc_info=True)
+                break
+            else:
+                break
+        return result
+    return wrapper
 
-    try:
-        cid = message.chat.id
-        text = f"{code('Pong!')}\n"
-        thread(send_message, (client, cid, text))
-        result = True
-    except Exception as e:
-        logger.warning(f"Ping error: {e}", exc_info=True)
 
-    return result
+def threaded(daemon: bool = True):
+    # Run with thread
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            return thread(func, args, kwargs, daemon)
+        return wrapper
+    return decorator

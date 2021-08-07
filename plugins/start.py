@@ -16,31 +16,56 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
 import logging
 
-
-from pyrogram import Client, filters
-from pyrogram.types import Message
-
-from ..functions.etc import code, thread
-from ..functions.filters import admin_user
-from ..functions.telegram import send_message
+from . import glovar
+from .functions.file import delete_file, save
 
 # Enable logging
 logger = logging.getLogger(__name__)
 
 
-@Client.on_message(filters.incoming & filters.private & filters.command(["ping"])
-                   & admin_user)
-def ping(client: Client, message: Message) -> bool:
+def init() -> bool:
+    # Init the data
     result = False
 
     try:
-        cid = message.chat.id
-        text = f"{code('Pong!')}\n"
-        thread(send_message, (client, cid, text))
+        # Check version
+        if glovar.current == glovar.version:
+            return True
+
+        # First start
+        if not glovar.current:
+            glovar.current = glovar.version
+            save("current")
+
         result = True
     except Exception as e:
-        logger.warning(f"Ping error: {e}", exc_info=True)
+        logger.warning(f"Init error: {e}", exc_info=True)
+
+    return result
+
+
+def renew() -> bool:
+    # Renew the session
+    result = False
+
+    try:
+        if not glovar.token:
+            glovar.token = glovar.bot_token
+            save("token")
+            return False
+
+        if glovar.token == glovar.bot_token:
+            return False
+
+        delete_file(glovar.SESSION_PATH)
+        glovar.token = glovar.bot_token
+        save("token")
+
+        result = True
+    except Exception as e:
+        logger.warning(f"Renew error: {e}", exc_info=True)
 
     return result
