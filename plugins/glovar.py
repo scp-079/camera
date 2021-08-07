@@ -166,6 +166,7 @@ all_commands: List[str] = ["ping"]
 
 locks: Dict[str, Lock] = {
     "file": Lock(),
+    "restart": Lock(),
     "speak": Lock(),
     "upload": Lock()
 }
