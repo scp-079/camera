@@ -42,10 +42,14 @@ sudo vim /etc/motion/motion.conf
 daemon on 
 width 640
 height 480
-framerate 100
+framerate 30
+threshold 3000
+pre_capture 5
+post_capture 60
+event_gap 3
 ffmpeg_video_codec mp4
 target_dir /home/pi/motion/tmp
-stream_maxrate 200
+stream_maxrate 60
 ```
 
 ## 创建文件夹
